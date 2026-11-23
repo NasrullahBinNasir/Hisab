@@ -5,6 +5,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>নূরানী কায়দা</title>
+<style>
+/* লং-প্রেসে ডাউনলোড/কপি/শেয়ার মেনু বন্ধ */
+html,body,*{-webkit-touch-callout:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-tap-highlight-color:transparent}
+img,svg,a{-webkit-user-drag:none;user-drag:none}
+/* হাত স্থির থাকবে */
+#ptrpen svg.fs .hnd,#ptrpen svg.fs .bst{animation:none!important}
+</style>
+<script>
+["contextmenu","dragstart","selectstart","copy","cut"].forEach(function(e){document.addEventListener(e,function(ev){ev.preventDefault();return false;},{capture:true});});
+</script>
 <meta name="theme-color" content="#1E2381"><meta name="color-scheme" content="light">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atma:wght@500;600;700&family=Baloo+Da+2:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap">
 <style>
@@ -467,24 +477,22 @@ button.najw{cursor:pointer;transition:background .15s,opacity .15s}
     <div class="st"><span>🏆</span><b id="stg">০</b><small>শেষ হওয়া ধাপ</small></div>
   </div>
   <div id="nextbox"></div>
-  <div class="gt first">✨ হরফ ছুঁয়ে দেখো</div>
-  <div class="lstrip" id="lstrip"></div>
+  <div class="lstrip" id="lstrip" hidden style="display:none"></div>
   <div class="gt">📚 ধাপ বেছে নাও</div>
   <div id="list"></div>
-  <div class="gt">🕌 কোরআন</div>
   <div id="qurhome"></div>
-  <div class="gt">📖 নাজেরা</div>
-  <div id="najhome"></div>
-  <div class="gt">🔤 শব্দ শিখি</div>
-  <div id="shbhome"></div>
-  <div class="gt">⏸️ সাকিন</div>
-  <div id="sakinhome"></div>
-  <div class="gt">🔁 তাশদীদ</div>
-  <div id="tashhome"></div>
-  <div class="gt">📝 নাজারা</div>
-  <div id="nzhome"></div>
-  <div class="gt">📜 হাদিস</div>
+  <button class="item gcard" id="qhubbtn" type="button" style="--gc:#0E8FD6"><span class="bub" style="font-size:24px">ذَكِيّ</span><span class="tx"><div class="tt">স্মার্ট</div><div class="ds">নাজেরা, শব্দ শিখি, সাকিন, তাশদীদ, নাজারা</div></span><span class="tick">✓</span></button>
   <div id="hadhome"></div>
+</div>
+
+<div class="wrap hide" id="qhub">
+  <button class="bk" id="qhback">← ডাশবোর্ড</button>
+  <div class="lh"><div class="t">স্মার্ট</div><div class="d">একটি অপশন বেছে নিন</div></div>
+  <div id="najhome"></div>
+  <div id="shbhome"></div>
+  <div id="sakinhome"></div>
+  <div id="tashhome"></div>
+  <div id="nzhome"></div>
 </div>
 
 <div class="wrap hide" id="hadith">
@@ -716,7 +724,7 @@ var BNP={6:"খ",13:"ছদ",14:"দদ",18:"গইন",15:"ত",20:"ক্ব�
 var HZ={6:"খ",13:"ছ",14:"দ",18:"গ",15:"ত",20:"ক",16:"য",9:"র"};
 function pron(i,m,sh){if(!m.mark)return BNP[i]||L[i][1];if(m.id==="f"&&HZ[i])return HZ[i];var s=hint(i,m);if(sh){if(m.sk)s=s.split(" ")[0];else if(m.x===LONG&&s.slice(-m.x.length)===m.x)s=s.slice(0,-m.x.length);}return s;}
 var guarded=false,ignorePop=false,curPage="home";
-var BKB={group:"gback",nukta:"nback",sim:"sback",lesson:"back",words:"wback",swpage:"swback",tjpage:"tjback",najs:"najsback",najr:"najrback"};
+var BKB={qhub:"qhback",group:"gback",nukta:"nback",sim:"sback",lesson:"back",words:"wback",swpage:"swback",tjpage:"tjback",najs:"najsback",najr:"najrback"};
 function ovOpen(){return ["sfov","wov","ov"].some(function(id){return document.getElementById(id).classList.contains("show");});}
 function sync(){
   var need=ovOpen()||curPage!=="home";
@@ -734,7 +742,7 @@ window.addEventListener("popstate",function(){
   if(ignorePop){ignorePop=false;guarded=false;sync();return;}
   guarded=false;uiBack();sync();
 });
-function show(id){curPage=id;if(window.__wipeHand)__wipeHand();setTimeout(sync,0);["home","group","nukta","sim","lesson","words","swpage","tjpage","najs","najr","hadith"].forEach(function(x){document.getElementById(x).classList.toggle("hide",x!==id);});window.scrollTo(0,0);}
+function show(id){curPage=id;if(window.__wipeHand)__wipeHand();setTimeout(sync,0);["home","qhub","group","nukta","sim","lesson","words","swpage","tjpage","najs","najr","hadith"].forEach(function(x){document.getElementById(x).classList.toggle("hide",x!==id);});window.scrollTo(0,0);}
 
 function itemHtml(m,attr,val,title,desc,smp,isDone,extra){
   return '<button class="item'+(isDone?" done":"")+'" '+attr+'="'+val+'"><span class="bub">'+smp+'</span><span class="tx"><div class="tt">'+title+'</div><div class="ds">'+desc+'</div></span><span class="tick">✓</span></button>';
@@ -1841,7 +1849,7 @@ function openSakinFull(){
 function openTashdidHub(){
   document.getElementById("gt").textContent="তাশদীদ";
   document.getElementById("gd").textContent="একটি পাঠ বেছে নিন";
-  document.getElementById("gback").textContent="← ডাশবোর্ড";
+  document.getElementById("gback").textContent="← স্মার্ট";
   document.getElementById("group").style.setProperty("--gc",NJ_GC);
   var gl=document.getElementById("glist");gl.innerHTML="";
   function add(id,bub,fs,t,d,fn){gl.insertAdjacentHTML("beforeend",'<button class="item" id="'+id+'"><span class="bub" style="font-size:'+fs+'px">'+bub+'</span><span class="tx"><div class="tt">'+t+'</div>'+(d?'<div class="ds">'+d+'</div>':'')+'</span></button>');document.getElementById(id).onclick=fn;}
@@ -1850,13 +1858,13 @@ function openTashdidHub(){
   add("tsw2","مِّتَّ",18,"দুই তাশদীদ","এক শব্দে দুইটি তাশদীদ — "+bn(SKT2.length)+"টি শব্দ",function(){openSkMulti("t2");});
   add("tsw3","لَنَصَّدَّقَنَّ",15,"তিন তাশদীদ","এক শব্দে তিনটি তাশদীদ — "+bn(SKT3.length)+"টি শব্দ",function(){openSkMulti("t3");});
   add("tsexm","\ud83d\udcdd",22,"এক্সাম","দুই ও তিন তাশদীদের পরীক্ষা",function(){openExamM("t");});
-  gbTarget=function(){renderHome();show("home");};
+  gbTarget=openQHub;
   show("group");
 }
 function openSakinHub(){
   document.getElementById("gt").textContent="সাকিন";
   document.getElementById("gd").textContent="একটি পাঠ বেছে নিন";
-  document.getElementById("gback").textContent="← ডাশবোর্ড";
+  document.getElementById("gback").textContent="← স্মার্ট";
   document.getElementById("group").style.setProperty("--gc",NJ_GC);
   document.getElementById("glist").innerHTML=itemHtml(null,"data-sk","1","হরফ",SK.d,"اَبْ",done.sakin);
   document.getElementById("glist").insertAdjacentHTML("beforeend",'<button class="item" id="skprac"><span class="bub" style="font-size:20px">اَبْ اَتْ</span><span class="tx"><div class="tt">হরফ প্র্যাকটিস</div></span></button>');
@@ -1872,7 +1880,7 @@ function openSakinHub(){
   });
   document.getElementById("glist").insertAdjacentHTML("beforeend",'<button class="item" id="skexm"><span class="bub" style="font-size:22px">\ud83d\udcdd</span><span class="tx"><div class="tt">এক্সাম</div><div class="ds">দুই, তিন ও চার সাকিনের পরীক্ষা</div></span></button>');
   document.getElementById("skexm").onclick=function(){openExamM("s");};
-  gbTarget=function(){renderHome();show("home");};
+  gbTarget=openQHub;
   show("group");
 }
 function openSakin(){
@@ -1887,6 +1895,9 @@ function openSakin(){
 var _rh=renderHome;
 renderHome=function(){_rh();najCard();document.getElementById("gback").textContent="← ডাশবোর্ড";};
 
+function openQHub(){renderHome();show("qhub");}
+document.getElementById("qhubbtn").onclick=openQHub;
+document.getElementById("qhback").onclick=function(){renderHome();show("home");};
 function openNajHub(){
   najUse("q");var tq=0,dq=0;NSUR.forEach(function(s){tq+=s.v.length;dq+=najCount(s);});
   najUse("t");var tt=0,dt=0;NSUR.forEach(function(s){tt+=s.v.length;dt+=najCount(s);});najUse("f");var tf=0,df=0;NSUR.forEach(function(s){tf+=najTW(s);df+=najDW(s);});
@@ -1900,8 +1911,8 @@ function openNajHub(){
    +'<button class="item gcard'+(df===tf?" done":"")+'" data-qf="1" style="--gc:'+NJ_GC+'"><span class="bub" style="font-size:22px">اَللّٰهِ</span><span class="tx"><div class="tt">কোরআন ৫০%</div><div class="ds">'+bn(tf)+'টি শব্দ · '+bn(df)+'/'+bn(tf)+' পড়া হয়েছে</div><div class="gbar"><i style="width:'+Math.round(df/tf*100)+'%"></i></div></span><span class="tick">✓</span></button>';
   document.getElementById("glist").innerHTML=h;
   Array.prototype.forEach.call(document.querySelectorAll("#glist .item"),function(b){b.onclick=function(){if(b.dataset.chum){openChum();return;}if(b.dataset.qf){najUse("f");najOpenS();return;}if(b.dataset.nsh){najUse("t");}else{najUse("q");}najOpenS();};});
-  document.getElementById("gback").textContent="← ডাশবোর্ড";
-  gbTarget=function(){renderHome();show("home");};
+  document.getElementById("gback").textContent="← স্মার্ট";
+  gbTarget=openQHub;
   show("group");
 }
 function openChum(){
@@ -1927,7 +1938,7 @@ function najOpenS(){
   if(najDS==="c"){H.querySelector(".t").textContent="শব্দ";H.querySelector(".d").textContent="শব্দ দেখে দেখে পড়ি — "+bn(NSUR.reduce(function(a,x){return a+najTW(x);},0))+"টি শব্দ";TP.innerHTML="এখানে চুম্বক নাজেরার শব্দ দেওয়া হয়েছে।";}
   if(najDS==="f"){H.querySelector(".t").textContent="কোরআন ৫০%";H.querySelector(".d").textContent="শব্দ দেখে দেখে পড়ি — "+bn(NSUR.reduce(function(a,x){return a+najTW(x);},0))+"টি শব্দ";TP.innerHTML="এখানে কোরআন ৫০% এর শব্দ দেওয়া হয়েছে।";}
   if(najDS==="z"){H.querySelector(".t").textContent="নাজারা";H.querySelector(".d").textContent="কোরআনের চার শব্দের বাক্যাংশ, লাইন দেখে দেখে পড়ি";TP.innerHTML="এখানে কোরআনের চার শব্দের বাক্যাংশ লাইন ধরে দেওয়া হয়েছে।";}
-  document.getElementById("najsback").textContent=(najDS==="s"||najDS==="q"||najDS==="z")?"← ডাশবোর্ড":najDS==="c"?"← চুম্বক নাজেরা":"← নাজেরা";
+  document.getElementById("najsback").textContent=najDS==="q"?"← ডাশবোর্ড":(najDS==="s"||najDS==="z")?"← স্মার্ট":najDS==="c"?"← চুম্বক নাজেরা":"← নাজেরা";
   NSUR.forEach(function(s,i){
     var c=najCount(s),t=s.v.length;
     if(najSh()){h+='<button class="item gcard'+(c===t?" done":"")+'" data-s="'+i+'" style="--gc:'+NJ_GC+'"><span class="bub" style="font-size:22px">'+s.a+'</span><span class="tx"><div class="tt">'+s.n+'</div><div class="ds">'+(s.wc?bn(s.wc)+'টি শব্দ · '+bn(c)+'/'+bn(t)+' কার্ড পড়া হয়েছে':bn(t)+'টি শব্দ · '+bn(c)+'/'+bn(t)+' পড়া হয়েছে')+'</div><div class="gbar"><i style="width:'+Math.round(c/t*100)+'%"></i></div></span><span class="tick">✓</span></button>';return;}
@@ -1960,7 +1971,8 @@ function najRender(){
   var v=document.getElementById("najverse");v.innerHTML=najMode===1?h:"";v.style.display=najMode===1?"":"none";
   Array.prototype.forEach.call(v.querySelectorAll("button.najw"),function(b){b.onclick=function(){najW=+b.dataset.w;najRender();};});
   najFocus(words);
-  document.getElementById("najn").textContent=najA===s.v.length-1?"শেষ করি ✓":"পরের আয়াত →";
+  document.getElementById("najn").textContent=najA===s.v.length-1?(najDS==="f"&&najS<NSUR.length-1?"পরের ধাপ →":"শেষ করি ✓"):"পরের আয়াত →";
+  document.getElementById("najp").textContent=(najDS==="f"&&najA===0&&najS>0)?"← আগের ধাপ":"← আগের আয়াত";
 }
 function najFocus(words){
   var f=document.getElementById("najfocus");var FA=NSUR[najS].id==="fa";
@@ -2030,13 +2042,15 @@ function najFocus(words){
   showK(najSh()?n-1:-1); /* সাকিন/তানভীন/শব্দ ইত্যাদি সেকশনে ঢুকলেই কালার চালু থাকবে */
 }
 [1,2].forEach(function(n){document.getElementById("najm"+n).onclick=function(){najMode=n;najRender();};});
-document.getElementById("najsback").onclick=function(){if(najDS==="c"){openChum();return;}if(najDS!=="s"&&najDS!=="q"&&najDS!=="z"){openNajHub();return;}renderHome();show("home");};
+document.getElementById("najsback").onclick=function(){if(najDS==="c"){openChum();return;}if(najDS!=="s"&&najDS!=="q"&&najDS!=="z"){openNajHub();return;}if(najDS==="q"){renderHome();show("home");return;}openQHub();};
 document.getElementById("najrback").onclick=function(){if(najDS==="e"){openExamDash();return;}if(najDS==="x"){openExamM();return;}if(najDS==="k"){openSakinFull();return;}if(najDS==="m"){openSkMulti(SKM);return;}najOpenS();};
-document.getElementById("najp").onclick=function(){if(najA>0){najA--;najW=0;najRender();window.scrollTo(0,0);}};
+/* কোরআন ৫০%: এক ধাপের শেষে পরের ধাপে (আল্লাহ → ইন্না...) যাওয়া */
+function najGoSec(d){var ni=najS+d;if(najDS!=="f"||ni<0||ni>=NSUR.length)return false;najOpenR(ni);najA=d<0?NSUR[najS].v.length-1:0;najW=0;najRender();window.scrollTo(0,0);return true;}
+document.getElementById("najp").onclick=function(){if(najA>0){najA--;najW=0;najRender();window.scrollTo(0,0);}else najGoSec(-1);};
 document.getElementById("najn").onclick=function(){
   var s=NSUR[najS],a=naj[s.id]||(naj[s.id]=[]);
   if(a.indexOf(najA)<0)a.push(najA);najSave();
-  if(najA<s.v.length-1){najA++;najW=0;najRender();window.scrollTo(0,0);}else if(najDS==="e")openExamDash();else if(najDS==="x")openExamM();else if(najDS==="k")openSakinFull();else if(najDS==="m")openSkMulti(SKM);else najOpenS();
+  if(najA<s.v.length-1){najA++;najW=0;najRender();window.scrollTo(0,0);}else if(najDS==="f"&&najS<NSUR.length-1)najGoSec(1);else if(najDS==="e")openExamDash();else if(najDS==="x")openExamM();else if(najDS==="k")openSakinFull();else if(najDS==="m")openSkMulti(SKM);else najOpenS();
 };
 /* স্ক্রিনে বাম/ডান সোয়াইপ করলে পরের/আগের আয়াত */
 (function(){
@@ -2050,7 +2064,7 @@ document.getElementById("najn").onclick=function(){
     var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
     if(Date.now()-t0>800||Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
     var s=NSUR[najS];
-    if(dx<0){ if(najA<s.v.length-1)document.getElementById("najn").onclick(); }
+    if(dx<0){ if(najA<s.v.length-1||(najDS==="f"&&najS<NSUR.length-1))document.getElementById("najn").onclick(); }
     else document.getElementById("najp").onclick();
   },{passive:true});
 })();
@@ -2246,7 +2260,7 @@ renderHome();
    +'#ptrtools{display:none!important;position:fixed;z-index:75;gap:8px;align-items:center}'
    +'#ptrtools button{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--ink);background:#fff;font-size:16px;line-height:1;padding:0;cursor:pointer;box-shadow:0 3px 0 var(--ink)}'
    +'#ptrtools button.on{background:var(--sun-t,#ffe08a)}#ptrtools button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}'
-   +'#ptrdraw{position:fixed;left:0;top:0;right:0;bottom:0;width:100%;height:100%;z-index:65;pointer-events:none;display:none}'
+   +'#ptrdraw{position:absolute;left:0;top:0;z-index:65;pointer-events:none;display:none}'
    +'#ptrpen svg.fs{position:absolute;left:0;top:0;display:none;overflow:visible}#ptrpen.fa svg:not(.fs){display:none}#ptrpen.fa svg.fs.sh{display:block}'
    +'#ptrpen.fa.er svg{filter:none}#ptrpen svg.fs *{pointer-events:none}#ptrpen svg.fs image{pointer-events:auto}#ptrpen svg.fs path,#ptrpen svg.fs rect{pointer-events:visiblePainted}#ptrpen svg.fs .swh path{pointer-events:none}'
    +'#ptrpen svg.fs .hnd{transform-origin:0 0}#ptrpen svg.pfP .hnd{animation:pfTap 1.2s ease-in-out infinite}#ptrpen svg.pfW .hnd{animation:pfWr 1.5s ease-in-out infinite}#ptrpen svg.pfE .hnd{animation:pfWp .6s ease-in-out infinite}#ptrpen.dn svg.fs .hnd{animation:none}#ptrpen svg.fs .bst{transform-origin:0 0;animation:pfBst 1.2s ease-out infinite}#ptrpen.dn svg.fs .bst{animation:none;opacity:1}#ptrpen svg.fs .bst path{pointer-events:none}@keyframes pfBst{0%,25%{opacity:0;transform:scale(.6)}38%{opacity:1;transform:scale(1)}75%,100%{opacity:0;transform:scale(1.25)}}'
@@ -2261,11 +2275,11 @@ renderHome();
   window.addEventListener("resize",placeTools);
   function sync(){document.querySelectorAll("#najptb,.handopen").forEach(function(b){b.style.background=p.style.display==="none"?"#fff":"var(--sun-t,#ffe08a)";});placeTools();if(window.WBsync)WBsync();}
   function openP(){p.style.left=Math.round((window.innerWidth-44)/2)+"px";p.style.top=Math.round((window.innerHeight-124)/2)+"px";p.style.display="block";applyLook();clamp();sync();}
-  function closeP(){p.style.display="none";setDraw(false);wipe();dcHas=false;dc.style.display="none";sync();}
+  function closeP(){p.style.display="none";dcHas=ST.length>0;setDraw(false);saveCur();dc.style.display=dcHas?"block":"none";sync();}
   function clamp(){var x=parseFloat(p.style.left)||0,y=parseFloat(p.style.top)||0;
     p.style.left=Math.min(Math.max(-10,x),window.innerWidth-34)+"px";p.style.top=Math.min(Math.max(-10,y),window.innerHeight-30)+"px";}
   document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#najptb,.handopen");if(!b)return;if(p.style.display==="none")openP();else closeP();});
-  window.__wipeHand=function(){wipe();dcHas=false;dc.style.display=drawOn?"block":"none";};
+  window.__wipeHand=function(){saveCur();curK=null;wipe();dcHas=false;dc.style.display=drawOn?"block":"none";};
   /* কলমের ডগা ফেকাশে আয়াতের ওপর দিয়ে গেলে ওই অংশ রঙিন হবে */
   function reveal(){
     if(!document.getElementById("najbig"))return;
@@ -2277,8 +2291,26 @@ renderHome();
   }
   /* ✏️ দাগ দেওয়া: চালু থাকলে কলমের ডগা যেখানে যায় সেখানে দাগ পড়ে */
   var dc=document.createElement("canvas");dc.id="ptrdraw";document.body.appendChild(dc);var dx=dc.getContext("2d"),drawOn=false,lp=null;
-  var dpr=1;function sizeC(){var d=window.devicePixelRatio||1,r=dc.getBoundingClientRect();dpr=d;var w=Math.max(1,Math.round((r.width||window.innerWidth)*d)),h=Math.max(1,Math.round((r.height||window.innerHeight)*d));if(dc.width!==w||dc.height!==h){dc.width=w;dc.height=h;}dx.setTransform(d,0,0,d,0,0);dx.lineCap="round";dx.lineJoin="round";dx.strokeStyle="#e5383b";dx.lineWidth=5;}
+  var dpr=1,dcW=0,dcH=0;function sizeC(){
+    dc.style.width="0px";dc.style.height="0px";
+    var de=document.documentElement,W=Math.max(de.scrollWidth,window.innerWidth),H=Math.max(de.scrollHeight,window.innerHeight);
+    var d=Math.min(window.devicePixelRatio||1,Math.sqrt(12e6/(W*H)));if(d>2)d=2;
+    dc.style.width=W+"px";dc.style.height=H+"px";dpr=d;
+    var w=Math.max(1,Math.round(W*d)),h=Math.max(1,Math.round(H*d)),ch=(dc.width!==w||dc.height!==h);
+    if(ch){dc.width=w;dc.height=h;}
+    dx.setTransform(d,0,0,d,0,0);dx.lineCap="round";dx.lineJoin="round";dx.strokeStyle="#e5383b";dx.lineWidth=5;return ch;}
   sizeC();
+  /* ===== দাগ আয়াত-ভিত্তিক সেভ: মুছে না ফেললে থেকে যাবে ===== */
+  var MK="qaida_marks",M={},curK=null,svT=0;
+  try{M=JSON.parse(localStorage.getItem(MK)||"{}")||{};}catch(e){M={};}
+  function snap(){return ST.map(function(q){var c=JSON.parse(JSON.stringify(q,function(k,v){return typeof v==="number"?Math.round(v*10)/10:v;}));delete c.k;return c;});}
+  function saveCur(){if(!curK)return;if(ST.length)M[curK]=snap();else delete M[curK];try{localStorage.setItem(MK,JSON.stringify(M));}catch(e){}}
+  function touchSave(){clearTimeout(svT);svT=setTimeout(saveCur,300);}
+  function keyNow(){var nr=document.getElementById("najr");if(!nr||nr.classList.contains("hide"))return null;
+    try{var sid=NSUR[najS].id;return [najDS,sid,najA,window.innerWidth].join("|");}catch(e){return null;}}
+  function loadFor(k){ST.length=0;cur=null;curK=k;if(k&&M[k])M[k].forEach(function(q){ST.push(q);});
+    dcHas=ST.length>0;dc.style.display=(mode!==0||dcHas)?"block":"none";sizeC();drawAll();}
+  window.addEventListener("pagehide",saveCur);document.addEventListener("visibilitychange",function(){if(document.hidden)saveCur();});
   function tipPt(){var r=p.getBoundingClientRect(),c=dc.getBoundingClientRect();return [r.left+22-c.left,r.top+8-c.top];}
   var ST=[],cur=null;
   function wipe(){ST.length=0;cur=null;dx.save();dx.setTransform(1,0,0,1,0,0);dx.clearRect(0,0,dc.width,dc.height);dx.restore();}
@@ -2374,7 +2406,7 @@ renderHome();
   function rest(){if(p.classList.contains("fa")){sv.style.transform="";return;}sv.style.transform=drawOn?"rotate(10deg)":(mode===2?"rotate(-10deg)":"");}
   var dX=0,dY=0,dT=0,mvd=0,lastTap=0,preTap=0;
   var dg=false,ox=0,oy=0;
-  p.addEventListener("pointerdown",function(e){if(e.target.closest&&e.target.closest(".pbt"))return;dg=true;lp=null;dX=e.clientX;dY=e.clientY;dT=performance.now();mvd=0;p.setPointerCapture(e.pointerId);var r=p.getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top;p.classList.add("dn");reveal();if(drawOn){dcHas=true;dc.style.display="block";}mark();eraseAt();lastX=null;tl=0;tilt(e);e.preventDefault();});
+  p.addEventListener("pointerdown",function(e){if(e.target.closest&&e.target.closest(".pbt"))return;dg=true;lp=null;dX=e.clientX;dY=e.clientY;dT=performance.now();mvd=0;p.setPointerCapture(e.pointerId);var r=p.getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top;p.classList.add("dn");reveal();if(drawOn){dcHas=true;dc.style.display="block";if(sizeC())drawAll();}mark();eraseAt();lastX=null;tl=0;tilt(e);e.preventDefault();});
   p.addEventListener("pointermove",function(e){if(!dg)return;p.style.left=(e.clientX-ox)+"px";p.style.top=(e.clientY-oy)+"px";mvd=Math.max(mvd,Math.hypot(e.clientX-dX,e.clientY-dY));reveal();mark();eraseAt();tilt(e);e.preventDefault();});
   ["pointerup","pointercancel"].forEach(function(n){p.addEventListener(n,function(e){
     if(wbDown){if(dg&&e.type==="pointerup"&&mvd<8&&performance.now()-dT<300)WB.cancel();else WB.end();wbDown=false;}
@@ -2383,13 +2415,14 @@ renderHome();
       var nt=performance.now();
       if(nt-lastTap<350){lastTap=0;setMode(preTap);setMode(mode===2?0:2);} /* দুইবার ট্যাপ: মোছার মোড চালু/বন্ধ */
       else{lastTap=nt;preTap=mode;setMode(mode===1?0:1);}} /* একবার ট্যাপ: লেখা চালু/বন্ধ */
-    dg=false;finish();lp=null;lastX=null;rest();p.classList.remove("dn");clamp();});});
+    dg=false;finish();lp=null;lastX=null;rest();p.classList.remove("dn");clamp();touchSave();});});
   window.addEventListener("resize",function(){if(p.style.display!=="none")clamp();});
   var najr=document.getElementById("najr");
   if(najr)new MutationObserver(function(){if(najr.classList.contains("hide"))closeP();}).observe(najr,{attributes:true,attributeFilter:["class"]});
   /* পাতা নতুন করে আঁকা হলে বাটনের রং ঠিক রাখা */
   var lastBig=null;
-  if(najr)new MutationObserver(function(){sync();var b=document.getElementById("najbig");if(b!==lastBig){lastBig=b;if(dcHas){wipe();dcHas=false;dc.style.display=drawOn?"block":"none";}}}).observe(najr,{childList:true,subtree:true});
+  if(najr)new MutationObserver(function(){sync();var b=document.getElementById("najbig"),nk=keyNow();
+    if(b!==lastBig||nk!==curK){lastBig=b;if(nk!==curK){saveCur();loadFor(nk);}}}).observe(najr,{childList:true,subtree:true});
 })();
 </script>
 <script>
