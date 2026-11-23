@@ -1615,7 +1615,7 @@ skApply();
 function skMenu(open){var m=document.getElementById("sknmenu");if(m)m.style.display=open?"block":"none";}
 function skUi(){if(najDS==="z"){zUi();return;}
   var w=document.getElementById("sknw");if(!w)return;
-  w.style.display=(najDS==="z"||najDS==="k"||najDS==="e"||najDS==="m"||najDS==="x")?"":"none";
+  w.style.display=(najDS==="z"||najDS==="k"||najDS==="e"||najDS==="m"||najDS==="x"||najDS==="w")?"":"none";
   document.getElementById("sknmenu").className="sknmenu";
   document.getElementById("sknbtn").textContent="⚙ "+bn(SKN)+" শব্দ ▾";
   var h='<div class="skt">প্রতি কার্ডে শব্দ</div><div class="skr">';
@@ -1627,7 +1627,7 @@ function skSet(n){if(najDS==="z"){zSet(n);return;}
   if(n===SKN){skMenu(false);return;}
   var start=najA*SKN;
   SKN=n;try{localStorage.setItem("qaida_sknum",String(n));}catch(e){}
-  skApply();if(najDS==="e"){exBuild();najUse("e");}else if(najDS==="m"){buildM();najUse("m");}else if(najDS==="x"){exmBuild();najUse("x");}else if(najDS==="z"){skApplyZ();najUse("z");}else najUse("k");
+  skApply();if(najDS==="e"){exBuild();najUse("e");}else if(najDS==="m"){buildM();najUse("m");}else if(najDS==="x"){exmBuild();najUse("x");}else if(najDS==="z"){skApplyZ();najUse("z");}else if(najDS==="w"){wBuild();najUse("w");}else najUse("k");
   najA=Math.floor(start/SKN);najW=0;
   skUi();najRender();window.scrollTo(0,0);
 }
@@ -1640,8 +1640,8 @@ function skSet(n){if(najDS==="z"){zSet(n);return;}
 })();
 function najTW(x){return x.wc||x.v.length;}
 function najDW(x){if(x.wcs){var t=0;(naj[x.id]||[]).forEach(function(i){t+=x.wcs[i]||0;});return t;}return x.wc?Math.min(x.wc,najCount(x)*3):najCount(x);}
-function najSh(){return najDS==="z"||najDS==="s"||najDS==="t"||najDS==="c"||najDS==="f"||najDS==="k"||najDS==="e"||najDS==="m"||najDS==="x";}
-function najUse(m){najDS=m;if(m==="z"){NSUR=NSUR_Z;naj=naj_Z;najKey="qaida_nazara";}else if(m==="e"){NSUR=NSUR_E;naj=naj_E;najKey="qaida_exam";}else if(m==="k"){NSUR=NSUR_K;naj=naj_K;najKey=skKey();}else if(m==="x"){NSUR=NSUR_X;naj=naj_X;najKey="qaida_exmam";}else if(m==="m"){NSUR=NSUR_M;naj=naj_M;najKey=mKey();}else if(m==="f"){NSUR=NSUR_F;naj=naj_F;najKey="qaida_fq";}else if(m==="c"){NSUR=NSUR_CH;naj=naj_CH;najKey="qaida_chb";}else if(m==="t"){NSUR=NSUR_TN;naj=naj_TN;najKey="qaida_tnshb";}else if(m==="s"){NSUR=NSUR_SH;naj=naj_SH;najKey="qaida_shb";}else{NSUR=NSUR_Q;naj=naj_Q;najKey="qaida_naj";}}
+function najSh(){return najDS==="z"||najDS==="s"||najDS==="t"||najDS==="c"||najDS==="f"||najDS==="k"||najDS==="e"||najDS==="m"||najDS==="x"||najDS==="w";}
+function najUse(m){najDS=m;if(m==="z"){NSUR=NSUR_Z;naj=naj_Z;najKey="qaida_nazara";}else if(m==="e"){NSUR=NSUR_E;naj=naj_E;najKey="qaida_exam";}else if(m==="k"){NSUR=NSUR_K;naj=naj_K;najKey=skKey();}else if(m==="x"){NSUR=NSUR_X;naj=naj_X;najKey="qaida_exmam";}else if(m==="m"){NSUR=NSUR_M;naj=naj_M;najKey=mKey();}else if(m==="f"){NSUR=NSUR_F;naj=naj_F;najKey="qaida_fq";}else if(m==="c"){NSUR=NSUR_CH;naj=naj_CH;najKey="qaida_chb";}else if(m==="t"){NSUR=NSUR_TN;naj=naj_TN;najKey="qaida_tnshb";}else if(m==="s"){NSUR=NSUR_SH;naj=naj_SH;najKey="qaida_shb";}else if(m==="w"){NSUR=NSUR_W;naj=naj_W;najKey="qaida_stw";}else{NSUR=NSUR_Q;naj=naj_Q;najKey="qaida_naj";}}
 function najUnit(){return najSh()?"শব্দ":"আয়াত";}
 
 /* ---------- টাইমার: ১ম/২য় স্টুডেন্টের আলাদা সময়, শুরু/থামুন ---------- */
@@ -1784,6 +1784,8 @@ function openExamM(f){
   show("group");
 }
 function najCount(s){return (naj[s.id]||[]).length;}
+var NSUR_W=[{id:"w",n:"",a:"",v:[""]}],naj_W={},WWORDS=[],WTITLE="";
+function wBuild(){var v=[];for(var i=0;i<WWORDS.length;i+=SKN)v.push(WWORDS.slice(i,i+SKN).join(" "));NSUR_W=[{id:"w",n:WTITLE,a:"",u:"কার্ড",wc:WWORDS.length,v:v}];naj_W={};}
 var najS=0,najA=0,najMode=2,najW=0,najTimer=null;
 
 /* শব্দকে অক্ষর ও হরকতে ভাগ করে সিলেবল বানায় */
@@ -2023,7 +2025,7 @@ function najOpenR(si){
   najW=0;document.getElementById("najt").textContent=(najSh()?"":"সূরা ")+s.n;
   var sh=najSh();if(sh)najMode=2;document.getElementById("najr").classList.toggle("shn",sh);
   document.querySelector("#najr .seg").style.display=sh?"none":"";
-  document.getElementById("najrback").textContent=sh?(najDS==="e"||najDS==="x"?"← এক্সাম":najDS==="k"?"← সম্পূর্ণ হরফ":najDS==="m"?"← "+SKNM[SKM]:najDS==="z"?"← ভাগসমূহ":najDS==="t"?"← শব্দ শিখি — তানভীন":najDS==="c"?"← শব্দ":najDS==="f"?"← কোরআন ৭৫%":"← শব্দ শিখি"):"← সূরার তালিকা";
+  document.getElementById("najrback").textContent=sh?(najDS==="e"||najDS==="x"?"← এক্সাম":najDS==="k"?"← সম্পূর্ণ হরফ":najDS==="m"?"← "+SKNM[SKM]:najDS==="z"?"← ভাগসমূহ":najDS==="t"?"← শব্দ শিখি — তানভীন":najDS==="c"?"← শব্দ":najDS==="f"?"← কোরআন ৭৫%":najDS==="w"?"← সাকিন ও তাশদীদ":"← শব্দ শিখি"):"← সূরার তালিকা";
   skUi();show("najr");najRender();
 }
 function najRender(){
@@ -2108,18 +2110,18 @@ function najFocus(words){
   autoB.onclick=function(){stopT();if(FA||cur>=n-1){document.getElementById("najn").onclick();}else showK(cur+1);};
   document.getElementById("najprev").onclick=function(){stopT();if(FA){document.getElementById("najp").onclick();return;}showK(cur<=-1?-1:cur-1);};
   var cb=document.getElementById("najcolor");if(cb)cb.onclick=function(){stopT();showK(cur>=n-1?-1:n-1);};
-  showK(najSh()?n-1:-1); /* সাকিন/তানভীন/শব্দ ইত্যাদি সেকশনে ঢুকলেই কালার চালু থাকবে */
+  showK(n-1); /* সব সেকশনেই ঢুকলে কালার নিজে থেকে চালু থাকবে */
 }
 [1,2].forEach(function(n){document.getElementById("najm"+n).onclick=function(){najMode=n;najRender();};});
 document.getElementById("najsback").onclick=function(){if(najDS==="c"){openChum();return;}if(najDS!=="s"&&najDS!=="q"&&najDS!=="z"){openNajHub();return;}if(najDS==="q"){renderHome();show("home");return;}openQHub();};
-document.getElementById("najrback").onclick=function(){if(najDS==="e"){openExamDash();return;}if(najDS==="x"){openExamM();return;}if(najDS==="k"){openSakinFull();return;}if(najDS==="m"){openSkMulti(SKM);return;}najOpenS();};
+document.getElementById("najrback").onclick=function(){if(najDS==="w"){show("stpage");return;}if(najDS==="e"){openExamDash();return;}if(najDS==="x"){openExamM();return;}if(najDS==="k"){openSakinFull();return;}if(najDS==="m"){openSkMulti(SKM);return;}najOpenS();};
 /* কোরআন ৭৫%: এক ধাপের শেষে পরের ধাপে (আল্লাহ → ইন্না...) যাওয়া */
 function najGoSec(d){var ni=najS+d;if(najDS!=="f"||ni<0||ni>=NSUR.length)return false;najOpenR(ni);najA=d<0?NSUR[najS].v.length-1:0;najW=0;najRender();window.scrollTo(0,0);return true;}
 document.getElementById("najp").onclick=function(){if(najA>0){najA--;najW=0;najRender();window.scrollTo(0,0);}else najGoSec(-1);};
 document.getElementById("najn").onclick=function(){
   var s=NSUR[najS],a=naj[s.id]||(naj[s.id]=[]);
   if(a.indexOf(najA)<0)a.push(najA);najSave();
-  if(najA<s.v.length-1){najA++;najW=0;najRender();window.scrollTo(0,0);}else if(najDS==="f"&&najS<NSUR.length-1)najGoSec(1);else if(najDS==="e")openExamDash();else if(najDS==="x")openExamM();else if(najDS==="k")openSakinFull();else if(najDS==="m")openSkMulti(SKM);else najOpenS();
+  if(najA<s.v.length-1){najA++;najW=0;najRender();window.scrollTo(0,0);}else if(najDS==="f"&&najS<NSUR.length-1)najGoSec(1);else if(najDS==="e")openExamDash();else if(najDS==="x")openExamM();else if(najDS==="k")openSakinFull();else if(najDS==="m")openSkMulti(SKM);else if(najDS==="w")show("stpage");else najOpenS();
 };
 /* স্ক্রিনে বাম/ডান সোয়াইপ করলে পরের/আগের আয়াত */
 (function(){
@@ -2746,7 +2748,20 @@ var LN={};(function(){var c={};HADITHS.forEach(function(h){c[h.s]=(c[h.s]||0)+1;
     if(loaded)return;loaded=true;
     var b=atob(document.getElementById("stdata").textContent.replace(/\s+/g,"")),u=new Uint8Array(b.length);
     for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
-    fr.srcdoc=new TextDecoder("utf-8").decode(u);
+    var h=new TextDecoder("utf-8").decode(u);
+    var ns='<style>html,body,*{-webkit-touch-callout:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-tap-highlight-color:transparent}img,svg,a{-webkit-user-drag:none}</style><script>["contextmenu","dragstart","selectstart","copy","cut"].forEach(function(e){document.addEventListener(e,function(ev){ev.preventDefault();return false},true)});<\/script>';
+    ns+='<style>#wl>span{cursor:pointer}</style><script>document.addEventListener("click",function(e){var sp=e.target.closest&&e.target.closest("#wl>span");if(!sp)return;var all=[].slice.call(document.querySelectorAll("#wl>span")),ws=all.map(function(x){var p=x.querySelector(".pw"),c=x.querySelector(".cw"),b=x.querySelector("b.ar");return c?((p?p.textContent+" ":"")+c.textContent):(b?b.textContent:"")});var h2=document.querySelector(".card h2"),m=document.body.getAttribute("data-mode");parent.postMessage({st:"read",words:ws,i:all.indexOf(sp),title:(h2?h2.textContent:"")+" — "+(m==="h"?"তাশদীদ":"সাকিন")},"*")},true);<\/script>';
+    h=h.replace("</head>",ns+"</head>");
+    fr.srcdoc=h;
+    if(!window.__stMsg){window.__stMsg=1;window.addEventListener("message",function(e){
+      var d=e.data;if(!d||d.st!=="read"||e.source!==fr.contentWindow)return;
+      var ws=(d.words||[]).filter(function(w){return w&&w.trim();});if(!ws.length)return;
+      var idx=Math.max(0,Math.min(ws.length-1,+d.i||0));
+      WWORDS=ws;WTITLE=d.title||"শব্দ";wBuild();
+      najUse("w");
+      document.documentElement.style.setProperty("--gc",NJ_GC);
+      najOpenR(0);najA=Math.floor(idx/SKN);najW=0;skUi();najRender();window.scrollTo(0,0);
+    });}
   }
   document.getElementById("stcard").onclick=function(){load();show("stpage");};
   back.onclick=function(){show("home");};
